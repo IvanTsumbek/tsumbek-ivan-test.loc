@@ -1,59 +1,107 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Товары
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Все товары
+GET
+/api/products
+{
+  "category_id": 1,
+  "min_price": 100,
+  "max_price": 1000,
+  "sort": "popular",
+  "per_page": 3
+}
 
-## About Laravel
+1 товар
+GET
+/api/products/{id}
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Создаем товар
+POST
+/api/products
+{
+    "name": "Новый продукт",
+    "description": "Описание нового продукта",
+    "price": 350.00,
+    "category_id": 1,
+    "image": "product.jpg"
+}
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Редактируем товар
+PUT
+/api/products/{id}
+{
+    "name": "Обновлённый продукт",
+    "description": "Новое описание продукта после апдейта",
+    "price": 400.00,
+    "category_id": 1,
+    "image": "new-product.jpg"
+}
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Удаляем товар
+DELETE
+/api/products/{id}
 
-## Learning Laravel
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Технологии:
+•              PHP (Laravel Framework)
+•              Docker
+•              MariaDB
+ 
+Описание задачи:
+Создать веб-приложение на Laravel с использованием Docker и базы данных MariaDB, которое включает в себя следующие функциональные возможности:
+1.         Страница авторизации:
+◦        Реализовать регистрацию и авторизацию пользователей.
+ 
+2.         API:
+ Создать RESTful API для взаимодействия с приложением.
+3.       
+ a. API для товаров:
+◦        Реализовать следующие операции с товарами:
+▪        Создание нового товара.
+▪        Получение списка товаров.
+▪        Обновление информации о товаре.
+▪        Удаление товара.
+◦        Поля товара могут включать: название, описание, цену, категорию, изображение и т.д.
+ 
+4.        b. Комментарии к товарам:
+◦        Пользователи могут добавлять комментарии к товарам.
+◦        Реализовать возможность просмотра, добавления и удаления комментариев.
+◦        Только авторизованные пользователи могут оставлять комментарии.
+ 
+5.        c. Фильтры:
+◦        Реализовать фильтрацию товаров по различным параметрам:
+▪        Категория.
+▪        Ценовой диапазон.
+▪        Популярность и т.д.
+ 
+5.        d. История покупок:
+◦        Реализовать возможность для пользователей просматривать историю своих покупок.
+◦        Сохранять информацию о покупке: товары, дата, сумма и т.д.
+ 
+Требования к выполнению:
+•             Docker:
+◦        Проект должен быть развернут с использованием Docker.
+◦        Предоставить docker-compose.yml для развёртывания приложения и базы данных.
+ 
+•             База данных:
+◦        Использовать MariaDB для хранения данных.
+◦        Предоставить миграции для создания необходимых таблиц в базе данных.
+ 
+•             Код и структура проекта:
+◦        Соблюдать стандарты Laravel.
+◦        Использовать принципы ООП и паттерны проектирования где это уместно.
+◦        Код должен быть чистым, хорошо структурированным и легко читаемым.
+ 
+•             Документация:
+◦        Предоставить файл README.md с инструкциями по запуску приложения.
