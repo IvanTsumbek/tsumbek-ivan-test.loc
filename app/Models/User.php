@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->createToken($name)->plainTextToken;
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
 }

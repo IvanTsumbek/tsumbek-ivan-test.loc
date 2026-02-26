@@ -15,7 +15,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): JsonResponse
     {
-        // Проверяем email + password
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'message' => 'Invalid credentials',
@@ -24,25 +23,19 @@ class AuthenticatedSessionController extends Controller
 
         $user = $request->user();
 
-        // Создаём токен API
+        $user->tokens()->delete();
         $token = $user->createApiToken();
-
-        // Возвращаем JSON с пользователем и токеном
         return response()->json([
             'user' => $user,
             'token' => $token,
         ]);
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
     public function destroy(Request $request): JsonResponse
     {
         $user = $request->user();
 
         if ($user) {
-            // Удаляем все токены пользователя
             $user->tokens()->delete();
         }
 
