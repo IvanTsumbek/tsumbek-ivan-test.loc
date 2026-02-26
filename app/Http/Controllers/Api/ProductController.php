@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Application\Services\ProductService;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
+use App\Http\Resources\Product\ProductDetailResource;
+use App\Http\Resources\Product\ProductResource;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function __construct(readonly ProductService $productService
-    )
-    {
-    }
+    public function __construct(
+        readonly ProductService $productService
+    ) {}
 
     public function index(Request $request)
     {
@@ -22,33 +24,39 @@ class ProductController extends Controller
 
         return ProductResource::collection($products);
     }
-    
-    public function store(Request $request)
+
+    public function show(int $id)
     {
-        //
+        $product = $this->productService->getProductById($id);
+
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        return new ProductDetailResource($product);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+
+    public function store(StoreProductRequest $request)
     {
-        //
+        $product = $this->productService->createProduct($request->validated());
+
+        return new ProductDetailResource($product);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateProductRequest $request, $id)
     {
-        //
+        $product = $this->productService->updateProduct($id, $request->validated());
+
+        return new ProductDetailResource($product);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        $this->productService->deleteProduct($id);
+
+        return response()->json([
+            'message' => 'Product deleted successfully'
+        ]);
     }
 }

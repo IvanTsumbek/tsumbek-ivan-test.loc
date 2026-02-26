@@ -8,9 +8,7 @@ class ProductService
 {
     public function __construct(
         readonly ProductRepository $repo
-    )
-    {
-    }
+    ) {}
 
     public function getProducts(array $filters = [], int $perPage = 10)
     {
@@ -31,5 +29,29 @@ class ProductService
         }
 
         return $query->paginate($perPage);
+    }
+
+    public function getProductById(int $id)
+    {
+        return $this->repo->findById($id);
+    }
+
+    public function createProduct(array $data)
+    {
+        $product = $this->repo->create($data);
+
+        return $product->load('category');
+    }
+
+    public function updateProduct(int $id, array $data)
+    {
+        $product = $this->repo->update($id, $data);
+
+        return $product->load('category');
+    }
+
+    public function deleteProduct(int $id): void
+    {
+        $this->repo->delete($id);
     }
 }
