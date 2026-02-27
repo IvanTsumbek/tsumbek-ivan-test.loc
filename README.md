@@ -1,3 +1,23 @@
+Пользователи
+---------
+Регистрация (по дефолту 'user'; в базе самостоятельно меняем на 'admin')
+POST
+/api/register
+{
+    "name": "Ivan Petrov",
+    "email": "ivan@example.com",
+    "password": "securepassword",
+    "password_confirmation": "securepassword"
+}
+---------
+Логин
+POST
+/api/login
+{
+  "email": "ivan2@example.com",
+  "password": "password"
+}
+==========================================================================
 Категории
 ---------
 Все категории
@@ -30,7 +50,7 @@ DELETE
 ---------
 Все товары
 GET
-/api/products
+/api/products?category_id=1&min_price=4&max_price=1000&sort=price&per_page=10
 ---------
 1 товар
 GET
@@ -90,11 +110,16 @@ PUT
 DELETE
 /api/comments/30
 ==========================================================================
-
-
-
-
-
+Заказы (доступно только 'user')
+---------
+Просмотр всех заказов
+GET
+/api/orders?page=2&per_page=1
+---------
+Просмотр одного заказа
+GET
+/api/orders/1
+==========================================================================
 
 
 
