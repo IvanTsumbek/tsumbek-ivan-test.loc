@@ -1,179 +1,191 @@
-Пользователи
----------
-Регистрация (по дефолту 'user'; в базе самостоятельно меняем на 'admin')
-POST
-/api/register
+# Laravel Product API (Test Task)
+
+REST API на Laravel 12 для товаров, комментариев и истории покупок.
+Проект запускается в Docker (`nginx + php-fpm + MariaDB`).
+
+## Реализовано
+
+- Регистрация и логин пользователей (Sanctum token).
+- CRUD категорий и товаров (создание/изменение/удаление для `admin`).
+- Комментарии к товарам (просмотр для всех, добавление/изменение/удаление для авторизованных).
+- Фильтры товаров: категория, диапазон цен, сортировка по цене и популярности.
+- История покупок пользователя (`orders`), доступная роли `user`.
+- Seed-данные для быстрой демонстрации API.
+
+## Технологии
+
+- PHP 8.3
+- Laravel 12
+- MariaDB 11
+- Docker + Docker Compose
+- Laravel Sanctum
+
+## Быстрый запуск в Docker
+
+1. Скопировать окружение:
+
+```bash
+cp .env.example .env
+```
+
+2. Обновить переменные БД в `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=db
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=laravel
+DB_PASSWORD=laravel
+```
+
+3. Поднять контейнеры:
+
+```bash
+docker compose up -d --build
+```
+
+4. Установить зависимости и подготовить приложение:
+
+```bash
+docker compose exec app composer install
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan migrate --seed
+```
+
+5. Приложение доступно по адресу:
+
+- `http://localhost:8080`
+
+## Тестовые пользователи (из сидов)
+
+- `admin@example.com` / `password` (роль `admin`)
+- `user@example.com` / `password` (роль `user`)
+
+## Аутентификация
+
+### Регистрация
+
+- `POST /api/register`
+
+```json
 {
-    "name": "Ivan Petrov",
-    "email": "ivan@example.com",
-    "password": "securepassword",
-    "password_confirmation": "securepassword"
+  "name": "Ivan Petrov",
+  "email": "ivan@example.com",
+  "password": "password",
+  "password_confirmation": "password"
 }
----------
-Логин
-POST
-/api/login
+```
+
+### Логин
+
+- `POST /api/login`
+
+```json
 {
-  "email": "ivan2@example.com",
+  "email": "admin@example.com",
   "password": "password"
 }
-==========================================================================
-Категории
----------
-Все категории
-GET
-/api/categories
----------
-1 категория
-GET
-/api/categories/6
----------
-Создаем категорию
-POST
-/api/categories
-{
-  "name": "Others"
-}
----------
-Редактируем категорию
-PUT
-/api/categories/6
-{
-  "name": "Others updated"
-}
----------
-Удаляем категорию
-DELETE
-/api/categories/6
-==========================================================================
-Товары
----------
-Все товары
-GET
-/api/products?category_id=1&min_price=4&max_price=1000&sort=price&per_page=10
----------
-1 товар
-GET
-/api/products/{id}
----------
-Создаем товар
-POST
-/api/products
-{
-    "name": "Новый продукт",
-    "description": "Описание нового продукта",
-    "price": 350.00,
-    "category_id": 1,
-    "image": "product.jpg"
-}
----------
-Редактируем товар
-PUT
-/api/products/{id}
-{
-    "name": "Обновлённый продукт",
-    "description": "Новое описание продукта после апдейта",
-    "price": 400.00,
-    "category_id": 1,
-    "image": "new-product.jpg"
-}
----------
-Удаляем товар
-DELETE
-/api/products/{id}
-==========================================================================
-Комментарии
----------
-Все комментарии
-GET
-/api/products/6/comments
----------
-1 комментарий
-GET
-/api/products/3/comments
----------
-Создаем комментарий
-POST
-/api/products
-{
-  "text": "Отличный товар, всем советую!"
-}
----------
-Редактируем комментарий
-PUT
-/api/comments/30
-{
-  "text": "Отличный товар, всем советую!"
-}
----------
-Удаляем комментарий
-DELETE
-/api/comments/30
-==========================================================================
-Заказы (доступно только 'user')
----------
-Просмотр всех заказов
-GET
-/api/orders?page=2&per_page=1
----------
-Просмотр одного заказа
-GET
-/api/orders/1
-==========================================================================
+```
 
+Ответ содержит `token`. Дальше использовать:
 
+```text
+Authorization: Bearer <token>
+```
 
+### Логаут
 
+- `POST /api/logout` (требует Bearer token)
 
-Технологии:
-•              PHP (Laravel Framework)
-•              Docker
-•              MariaDB
- 
-Описание задачи:
-Создать веб-приложение на Laravel с использованием Docker и базы данных MariaDB, которое включает в себя следующие функциональные возможности:
-1.         Страница авторизации:
-◦        Реализовать регистрацию и авторизацию пользователей.
- 
-2.         API:
- Создать RESTful API для взаимодействия с приложением.
-3.       
- a. API для товаров:
-◦        Реализовать следующие операции с товарами:
-▪        Создание нового товара.
-▪        Получение списка товаров.
-▪        Обновление информации о товаре.
-▪        Удаление товара.
-◦        Поля товара могут включать: название, описание, цену, категорию, изображение и т.д.
- 
-4.        b. Комментарии к товарам:
-◦        Пользователи могут добавлять комментарии к товарам.
-◦        Реализовать возможность просмотра, добавления и удаления комментариев.
-◦        Только авторизованные пользователи могут оставлять комментарии.
- 
-5.        c. Фильтры:
-◦        Реализовать фильтрацию товаров по различным параметрам:
-▪        Категория.
-▪        Ценовой диапазон.
-▪        Популярность и т.д.
- 
-5.        d. История покупок:
-◦        Реализовать возможность для пользователей просматривать историю своих покупок.
-◦        Сохранять информацию о покупке: товары, дата, сумма и т.д.
- 
-Требования к выполнению:
-•             Docker:
-◦        Проект должен быть развернут с использованием Docker.
-◦        Предоставить docker-compose.yml для развёртывания приложения и базы данных.
- 
-•             База данных:
-◦        Использовать MariaDB для хранения данных.
-◦        Предоставить миграции для создания необходимых таблиц в базе данных.
- 
-•             Код и структура проекта:
-◦        Соблюдать стандарты Laravel.
-◦        Использовать принципы ООП и паттерны проектирования где это уместно.
-◦        Код должен быть чистым, хорошо структурированным и легко читаемым.
- 
-•             Документация:
-◦        Предоставить файл README.md с инструкциями по запуску приложения.
+## API Эндпоинты
+
+## 1) Категории
+
+- `GET /api/categories` - список
+- `GET /api/categories/{id}` - одна категория
+- `POST /api/categories` - создать (`admin`)
+- `PUT /api/categories/{id}` - обновить (`admin`)
+- `DELETE /api/categories/{id}` - удалить (`admin`)
+
+## 2) Товары
+
+- `GET /api/products` - список
+- `GET /api/products/{id}` - один товар
+- `POST /api/products` - создать (`admin`)
+- `PUT /api/products/{id}` - обновить (`admin`)
+- `DELETE /api/products/{id}` - удалить (`admin`)
+
+Фильтры для списка товаров:
+
+- `category_id` - фильтр по категории
+- `min_price` - минимальная цена
+- `max_price` - максимальная цена
+- `sort`:
+  - `popular`
+  - `price` или `price_asc`
+  - `price_desc`
+- `per_page` - пагинация
+
+Пример:
+
+`GET /api/products?category_id=1&min_price=10&max_price=300&sort=popular&per_page=10`
+
+## 3) Комментарии
+
+- `GET /api/products/{product}/comments` - комментарии товара
+- `GET /api/comments/{comment}` - один комментарий
+- `POST /api/products/{product}/comments` - добавить (`auth`)
+- `PUT /api/comments/{comment}` - обновить (`auth`, автор или admin)
+- `DELETE /api/comments/{comment}` - удалить (`auth`, автор или admin)
+
+Пример создания комментария:
+
+- `POST /api/products/1/comments`
+
+```json
+{
+  "text": "Excellent product, recommend it."
+}
+```
+
+## 4) История покупок
+
+- `GET /api/orders` - список заказов текущего пользователя (`user`)
+- `GET /api/orders/{id}` - один заказ текущего пользователя (`user`)
+
+## Сиды
+
+Добавлены сиды:
+
+- `UsersSeeder`
+- `CategoriesSeeder`
+- `ProductsSeeder`
+- `CommentsSeeder`
+- `OrdersSeeder`
+
+Запуск отдельно:
+
+```bash
+docker compose exec app php artisan db:seed
+```
+
+## Полезные команды
+
+Очистить БД и заново заполнить:
+
+```bash
+docker compose exec app php artisan migrate:fresh --seed
+```
+
+Остановить контейнеры:
+
+```bash
+docker compose down
+```
+
+Остановить и удалить volume БД:
+
+```bash
+docker compose down -v
+```

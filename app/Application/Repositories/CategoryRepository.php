@@ -23,12 +23,7 @@ class CategoryRepository
 
     public function update(int $id, array $data)
     {
-        $category = $this->findById($id);
-
-        if (!$category) {
-            throw new \Exception('Category not found');
-        }
-
+        $category = Category::findOrFail($id);
         $category->update($data);
 
         return $category;

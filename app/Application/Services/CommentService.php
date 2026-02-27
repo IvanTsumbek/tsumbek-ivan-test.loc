@@ -32,13 +32,9 @@ class CommentService
     {
         $comment = $this->repo->findById($id);
 
-        if (!$comment) {
-            throw new \Exception('Comment not found');
-        }
+        abort_if(!$comment, 404, 'Comment not found');
 
-        if ($comment->user_id !== $userId && !auth()->user()->isAdmin()) {
-            throw new \Exception('Forbidden');
-        }
+        abort_if($comment->user_id !== $userId && !auth()->user()->isAdmin(), 403, 'Forbidden');
 
         return $this->repo->update($id, $data);
     }
@@ -47,13 +43,9 @@ class CommentService
     {
         $comment = $this->repo->findById($id);
 
-        if (!$comment) {
-            throw new \Exception('Comment not found');
-        }
+        abort_if(!$comment, 404, 'Comment not found');
 
-        if ($comment->user_id !== $userId && !auth()->user()->isAdmin()) {
-            throw new \Exception('Forbidden');
-        }
+        abort_if($comment->user_id !== $userId && !auth()->user()->isAdmin(), 403, 'Forbidden');
 
         $this->repo->delete($id);
     }
